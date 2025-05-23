@@ -1,10 +1,10 @@
 import './piatti.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
-  static const String baseUrl = "https://localhost:3000/piatti";
-
+  static String get baseUrl => "http://192.168.1.68:3000/piatti";
   Future<List<Piatto>> fetchItems() async {
     final response = await http.get(Uri.parse(baseUrl));
 
@@ -15,6 +15,7 @@ class ApiService {
       throw Exception("Errore durante il recupero dei dati");
     }
   }
+
   Future<List<Piatto>> fetchSmartphones() async {
     final response = await http.get(Uri.parse('$baseUrl/smartphone'));
 
@@ -29,13 +30,8 @@ class ApiService {
 Future<void> deleteProduct(String id) async {
   final response = await http.delete(Uri.parse('https://localhost:3000/piatti/$id'));
 
-  if (response.statusCode != 200) {
-    throw Exception('Errore durante l\'eliminazione del prodotto');
+    if (response.statusCode != 200) {
+      throw Exception('Errore durante l\'eliminazione del prodotto');
+    }
   }
 }
-
-
-
-}
-
-

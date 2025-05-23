@@ -1,6 +1,6 @@
 import '../main.dart';
 import 'package:flutter/material.dart';
-// import 'editproductpage.dart';
+import 'editpiattopage.dart';
 import 'package:page_transition/page_transition.dart';
 import './piatti.dart';
 
@@ -31,12 +31,12 @@ class _PiattoScreenState extends State<PiattoScreen> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.grey),
             onPressed: () async {
-              // await Navigator.push(
-              //     context,
-              //     PageTransition(
-              //         type: PageTransitionType.rightToLeftWithFade,
-              //         child: ItemsScreen()));
-              // setState(() {});
+              await Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.rightToLeftWithFade,
+                      child: ItemsScreen()));
+              setState(() {});
             },
           ),
           title: Text(currentPiatto.name,
@@ -46,38 +46,38 @@ class _PiattoScreenState extends State<PiattoScreen> {
               icon: Icon(Icons.edit,
                   color: const Color.fromARGB(255, 196, 235, 40)),
               onPressed: () async {
-              //   final updated = await Navigator.push(
-              //     context,
-              //     PageTransition(
-              //       type: PageTransitionType.rightToLeftWithFade,
-              //       duration: Duration(milliseconds: 400),
-              //       child: EditProductPage(product: currentPiatto),
-              //     ),
-              //   );
+                final updated = await Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.rightToLeftWithFade,
+                    duration: Duration(milliseconds: 400),
+                    child: EditPiattoPage(piatto: currentPiatto),
+                  ),
+                );
 
-              //   if (updated != null && updated is Piatto) {
-              //     setState(() {
-              //       currentPiatto = updated;
-              //     });
-              //   }
+                if (updated != null && updated is Piatto) {
+                  setState(() {
+                    currentPiatto = updated;
+                  });
+                }
               },
             ),
             IconButton(
               icon: Icon(Icons.edit, color: Colors.blue),
               onPressed: () async {
-                // final updated = await Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) =>
-                //         EditProductPage(product: currentProduct),
-                //   ),
-                // );
+                final updated = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        EditPiattoPage(piatto: currentPiatto),
+                  ),
+                );
 
-                // if (updated != null && updated is Product) {
-                //   setState(() {
-                //     currentProduct = updated;
-                //   });
-                // }
+                if (updated != null && updated is Piatto) {
+                  setState(() {
+                    currentPiatto = updated;
+                  });
+                }
               },
             ),
           ],
