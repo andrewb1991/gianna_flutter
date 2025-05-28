@@ -9,10 +9,37 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin{
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
+   @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
+
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.decelerate),
+    );
+    _controller.forward();
+  @override
+    void dispose() {
+    _controller.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+  }
 
   Future<void> login() async {
     final String apiUrl = "http://192.168.1.68:3000/login";
@@ -43,16 +70,17 @@ class _LoginPageState extends State<LoginPage> {
         SnackBar(
             content: Text("Login effettuato con successo!"),
             behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.blue),
+            backgroundColor: const Color.fromARGB(255, 253, 185, 39)),
       );
 
       Navigator.pushReplacementNamed(context, '/home'); // Naviga alla home
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text("Errore: ${response.body}"),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.blue),
+          content: Text("Errore: ${response.body}"),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: const Color.fromARGB(255, 253, 185, 39),
+        ),
       );
     }
   }
@@ -70,31 +98,46 @@ class _LoginPageState extends State<LoginPage> {
           backgroundColor: const Color.fromARGB(255, 253, 185, 39),
         ),
         backgroundColor: const Color.fromARGB(255, 253, 185, 39),
-        body: 
-        
-        Container(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, 
-            children: [
+        body: Container(
+            child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+           FadeTransition(
+  opacity: _fadeAnimation,
+  child: ScaleTransition(
+    scale: _scaleAnimation,
+    child: Image.asset(
+      'lib/asset/logo/gianna_logo.avif',
+      height: 120,
+      fit: BoxFit.cover,
+    ),
+  ),
+),
+SizedBox(height: 30),
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               TextField(
                 controller: emailController,
                 decoration: InputDecoration(
                     labelText: "Email",
                     labelStyle: TextStyle(
-                      color: Color.fromARGB(255, 6, 6, 6),
+                      color: Colors.white,
                     )),
                 keyboardType: TextInputType.emailAddress,
                 style: TextStyle(
-                  color: Color.fromARGB(255, 58, 118, 166),
+                  color: Colors.white,
                 ),
               ),
               TextField(
                 controller: passwordController,
-                decoration: InputDecoration(labelText: "Password", labelStyle: TextStyle(
-                      color: Color.fromARGB(255, 6, 6, 6),
+                decoration: InputDecoration(
+                    labelText: "Password",
+                    labelStyle: TextStyle(
+                      color: Colors.white,
                     )),
+                keyboardType: TextInputType.emailAddress,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
                 obscureText: true,
               ),
               SizedBox(height: 20),
@@ -105,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text("Login"),
                     ),
             ]),
-          ),
-        ));
+          ]),
+        )));
   }
 }
